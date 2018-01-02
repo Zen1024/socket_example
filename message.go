@@ -50,6 +50,7 @@ func (m *HeartBeatResponse) GetMessageId() int32 {
 
 func serializeMsg(m Message) ([]byte, error) {
 	h := &proto.SocketHeader{}
+	h.SetMessageID(m.GetMessageId())
 	ctnt, err := json.Marshal(m)
 	if err != nil {
 		return nil, err

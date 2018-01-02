@@ -86,7 +86,7 @@ func (c *Client) readPacket() (*proto.Packet, error) {
 		return nil, err
 	}
 	p, ok := re.(*proto.Packet)
-	log.Printf("h:%+v\n", p.Header)
+
 	if !ok {
 		panic("invalid read packet return")
 	}

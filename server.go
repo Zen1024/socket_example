@@ -10,14 +10,10 @@ import (
 type Ctx struct{}
 
 func (c *Ctx) OnConnect(*socket.Conn) bool {
-	log.Print("OnConnect start......\n")
-	defer log.Print("OnConnect end......\n")
 	return true
 }
 
 func (c *Ctx) OnMessage(conn *socket.Conn, packet socket.ConnPacket) bool {
-	log.Print("onMessage start......\n")
-	defer log.Print("onMessage end......\n")
 
 	reqPacket, ok := packet.(*proto.Packet)
 	if !ok {
@@ -56,6 +52,7 @@ func (c *Ctx) OnConnectRequest(conn *socket.Conn, packet socket.ConnPacket) {
 	}
 
 	h := &proto.SocketHeader{}
+	h.SetMessageID(ConnResponseMessageID)
 	pc := proto.NewPacket(h, bt, nil)
 
 	if err := conn.AsyncWrite(pc, 3*time.Second); err != nil {
@@ -84,6 +81,7 @@ func (c *Ctx) OnHeartBeatRequest(conn *socket.Conn, packet socket.ConnPacket) {
 		log.Printf("Error serialize msg:%s\n", err.Error())
 	}
 	h := &proto.SocketHeader{}
+	h.SetMessageID(ConnHeartBeatResponseMessageID)
 	pc := proto.NewPacket(h, bt, nil)
 	conn.AsyncWrite(pc, 3*time.Second)
 	return
